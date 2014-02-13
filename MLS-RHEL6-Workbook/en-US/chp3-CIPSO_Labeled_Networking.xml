@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "MLS_RHEL6_Workbook.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking">
+	<title>CIPSO Labeled Networking</title>
+	<para>
+		This lab will show you how to set up CIPSO labeled networking with SSH. When using an SSH
+server that requires CIPSO labeled networking, both the client and server must have this set up. This means
+that anyone without CIPSO labeled networking will be unable to log in to a CIPSO enabled MLS SSH connection.
+	</para>
+	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-MLSSSH">
+		<title>Switching to the MLS Enabled SSH Server</title>
+		<para>
+			This is a test paragraph in a section
+		</para>
+	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-ActivateCIPSO">
+		<title>Activating CIPSO Labeled Networking</title>
+		<para>
+			This is a test paragraph in Section 2
+			<orderedlist>
+				<listitem>
+					<para>
+						listitem text
+					</para>
+				</listitem>
+			</orderedlist>
+		</para>
+	</section>
+
+	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-TestingCIPSO">
+		<title>Testing CIPSO Labeled Networking</title>
+		<para>. . .</para>
+	</section>
+
+	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-CIPSOPersistance">
+		<title>Making CIPSO Labeled Networking Permanent</title>
+		<para> . . . </para>
+	</section>
+
+</chapter>
+

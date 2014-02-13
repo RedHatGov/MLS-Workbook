@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "MLS_RHEL6_Workbook.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-MLS_RHEL6_Workbook-IPSec_Labeled_Networking">
+	<title>IPSec Labeled Networking</title>
+	<para>
+		This lab will show you how to set up IPSec Labeled Networking.
+	</para>
+	<section id="sect-MLS_RHEL6_Workbook-IPSec_Labeled_Networking-Introduction">
+		<title>Introduction</title>
+		<para>
+			This is a test paragraph in a section
+		</para>
+	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-IPSec_Labeled_Networking-SSH">
+		<title>Switching to the MLS Enabled SSH Server</title>
+		<para>
+			This is a test paragraph in Section 2
+			<orderedlist>
+				<listitem>
+					<para>
+						listitem text
+					</para>
+				</listitem>
+			</orderedlist>
+		</para>
+	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-IPSec_Labeled_Networking-DeactCIPSO">
+		<title>Deactivating CIPSO Labeled Networking</title>
+		<para> . . . </para>
+	</section>
+
+        <section id="sect-MLS_RHEL6_Workbook-IPSec_Labeled_Networking-EnablingIPSec">
+                <title>Enabling IPSec Labeled Networking</title>
+                <para> . . . </para>
+        </section>
+
+        <section id="sect-MLS_RHEL6_Workbook-IPSec_Labeled_Networking-TestingIPSec">
+                <title>Testing Labeled Networking</title>
+                <para> . . . </para>
+        </section>
+
+
+</chapter>
+

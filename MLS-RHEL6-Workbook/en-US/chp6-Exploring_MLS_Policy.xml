@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "MLS_RHEL6_Workbook.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-MLS_RHEL6_Workbook-Exploring_MLS_Policy">
+	<title>Exploring MLS Policy</title>
+	<para>
+		This lab will show you how to set up a backup administrator role with the privilege to read
+all files on the system, but no special write privileges. This role could be used to perform system backups,
+but without the risk of overwriting or modifying any system files.
+	</para>
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Policy-Introduction">
+		<title>Introduction</title>
+		<para>
+			This is a test paragraph in a section
+		</para>
+	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Policy-DefineThePolicy">
+		<title>Define the Policy</title>
+		<para>
+			This is a test paragraph in Section 2
+			<orderedlist>
+				<listitem>
+					<para>
+						listitem text
+					</para>
+				</listitem>
+			</orderedlist>
+		</para>
+	</section>
+
+</chapter>
+

@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "MLS_RHEL6_Workbook.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection">
+	<title>Exploring MLS and Data Protection</title>
+	<para>
+		This lab allows us to explore some of the data protection capabilities of MLS.
+	</para>
+	<para>
+		In this scenario, Red Hat's desktop and server teams are working on the latest top-secret
+developments. The developments are so top-secret, that the server team and the desktop team can't see what
+each other are working on. They are both working on brand new products. In the meantime, engineering has hired them a temp to receive reports from both teams and make them more manager friendly for his supervisor. Both
+teams must be careful not to leak data that the other team shouldn't have. However, these teams are allowed 
+to speak of matters that both teams know of, but are still confidential elsewhere. The reports that the teams
+create have the potential for containing confidential information which must be protected.
+	</para>
+	<para>
+		This lab will walk through the steps for working with MLS to achieve the above conditions.
+	</para>
+
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-Introduction">
+		<title>Introduction</title>
+		<para>
+			This is a test paragraph in a section
+		</para>
+	</section>
+
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-TransRolesDomsTypes">
+                <title>Creating Translations, Roles, Domains, and Types</title>
+                <para>
+                        This is a test paragraph in a section
+                </para>
+        </section>
+
+        <section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-Users">
+                <title>Creating the SELinux User and Setting Up Users on the System</title>
+                <para>
+                        This is a test paragraph in a section
+                </para>
+        </section>
+
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-DirInfra">
+		<title>Building the Directory Infrastructure</title>
+		<para> . . . </para>
+	</section>
+
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-Testing">
+		<title>Testing Our Setup</title>
+		<para> . . . </para>
+	</section>
+
+
+
+
+	
+</chapter>

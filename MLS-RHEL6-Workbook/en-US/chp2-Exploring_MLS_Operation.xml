@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "MLS_RHEL6_Workbook.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-MLS_RHEL6_Workbook-Exploring_MLS_Operation">
+	<title>Exploring MLS System Operation</title>
+	<para>
+		This lab will cover some of the principals of system operation in MLS. You will learn
+how to gain administrative access, how to edit configuration files, schedule cron jobs, mount DVDs, add
+users to an MLS system, lock and unlock user accounts, remove users, and defining administrative accounts on the system.
+	</para>
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-AdminAccess">
+		<title>Gain Administrative Access</title>
+		<para>
+			This is a test paragraph in a section
+		</para>
+	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-EditConfig">
+		<title>Editing Configuration Files</title>
+		<para>
+			This is a test paragraph in Section 2
+			<orderedlist>
+				<listitem>
+					<para>
+						listitem text
+					</para>
+				</listitem>
+			</orderedlist>
+		</para>
+	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-Cron">
+		<title>Scheduling Cron Jobs</title>
+		<para> . . . </para>
+	</section>
+
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-cdroms">
+		<title>Mounting CD/DVD Media</title>
+		<para> . . . </para>
+	</section>
+
+</chapter>
+

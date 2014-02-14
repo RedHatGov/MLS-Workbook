@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"[
 <!ENTITY % BOOK_ENTITIES SYSTEM "MLS_RHEL6_Workbook.ent">
 %BOOK_ENTITIES;
 ]>
@@ -56,8 +56,7 @@ users to an MLS system, lock and unlock user accounts, remove users, and definin
 					</tr>
 					<tr>
 						<td>5</td>
-						<td>Let's try to add an audit watch on a file in root named <emphasis
-								role="bold">donttouch</emphasis>:<para>auditctl -w /root/donttouch
+						<td>Let's try to add an audit watch on a file in root named <emphasis role="bold">donttouch</emphasis>:<para>auditctl -w /root/donttouch
 								-p wa -k privileged_files</para><para>This will not work as you are
 								only the system administrator, not the audit
 							administrator!</para></td>
@@ -108,8 +107,7 @@ Error opening /var/log/audit/audit.log (Permission denied)</programlisting></par
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>In an MLS system, the editor of choice is <emphasis role="italic"
-								>rnano</emphasis>.<para><quote>"Other editors can read and execute commands
+						<td>In an MLS system, the editor of choice is <emphasis role="italic">rnano</emphasis>.<para><quote>"Other editors can read and execute commands
 								specificed in run control files or in the edited files themselves or
 								have other complex dependencies on the execution environment. That
 								is a security risk and inappropriate for an editor used for system
@@ -141,12 +139,253 @@ fi</programlisting></td>
 	
 	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-Cron">
 		<title>Scheduling Cron Jobs</title>
-		<para> . . . </para>
+		<para>
+			<table frame="void">
+				<caption/>
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Scheduling cron jobs in MLS works similarly to scheduling these jobs
+							without MLS. One major difference is that you can specificy the
+							MLS_LEVEL that a job should execute at. Let's create a directory for
+							SystemHigh files in
+							/tmp:<programlisting>$ mkdir /tmp/SystemHigh
+$ chcon -l SystemHigh /tmp/SystemHigh</programlisting></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>If we create a file in /tmp/SystemHigh
+							as:<programlisting>$ touch /tmp/SystemHigh/testfile</programlisting>we
+							will see that it is created with SystemLow (ls -lZ /tmp/SystemHigh)</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Let's establish a cron job that will write a file with a level of
+							SystemHigh. Edit the crontab
+							using:<programlisting>$ crontab -e</programlisting>and specificy the
+							following:<programlisting>MLS_LEVEL=SystemHigh
+* * * * * id -Z > /tmp/SystemHigh/crontest</programlisting></td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Execute the
+							cronjob:<programlisting>$ watch ls -lZ /tmp/SystemH</programlisting>Within
+							a minute you should see the file crontest being created with a level of
+							SystemHigh.</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>We don't want all of our users creating cron jobs, so lets see how we
+							can keep them from doing
+							that:<programlisting># adduser sally
+# passwd sally</programlisting></td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td>Having added sally in the previous step, let's add her to
+							/etc/cron.deny:<programlisting>#echo "sally" >> /etc/cron.deny</programlisting>As
+							long as there is not an /etc/cron.allow, then specifiying sally's name
+							here will keep her from using crontab. If there were an /etc/cron.allow,
+							then only users listed in that file would be able to use crontab.</td>
+					</tr>
+					<tr>
+						<td>7</td>
+						<td>Login as sally and
+							execute:<programlisting>$ crontab -e</programlisting>The output should
+							be similar
+							to:<programlisting>You (sally) are not allowed to use this program (crontab)
+See crontab(1) for more information</programlisting></td>
+					</tr>
+				</tbody>
+			</table>
+		</para>
 	</section>
 
 	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-cdroms">
 		<title>Mounting CD/DVD Media</title>
 		<para> . . . </para>
 	</section>
+	
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-AddingUsers">
+		<title>Adding Users</title>
+		<para>
+			<table frame="void">
+				<caption/>
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>For adding users, if you set a temporary password, that password MUST be
+							changed by the user as soon as possible. To accomplish this, you can use
+							the following
+							procedure:<programlisting># useradd -m -c "John Doe" jdoe
+# passwd jdoe
+# chage -d $(date +%F -d "60 days ago") jdoe</programlisting></td>
+					</tr>
 
+				</tbody>
+			</table>
+		</para>
+	</section>	
+
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-Locking">
+		<title>Locking and Unlocking User Accounts</title>
+		<para>
+			<table frame="void">
+				<caption/>
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>An account can be locked in one of two ways. We'll first discuss manual
+							locking. To lock a user's account, simply
+							type:<programlisting># passwd -l user</programlisting>So to lock jdoe's
+							account, the command would
+							be:<programlisting># passwd -l jdoe</programlisting></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>To reset an account that has been manually locked, you do the
+							following:<programlisting>passwd -u user</programlisting>To unlock
+							jdoe's account, the command would
+							be:<programlisting># passwd -u jdoe</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>The second way an account can be locked is through pam_tally. On MLS
+							LSPP certified systems, pam_tally MUST be configured. According to
+							/etc/pam.d/login, pam_tally2.so will deny an account acecss on the 5th
+							login attempt. In order to see how many failed logins jdoe has right
+							now, do the
+							following:<programlisting>pam_tally2 --user jdoe</programlisting></td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Try logging in with the user jdoe and the wrong password until you
+							see:<programlisting>Your account is locked. Maximum amount of failed attempts was reached.</programlisting>That
+							is how the user knows that he is locked out. Log back in as root and
+							check his tally again.</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>In order to reset jdoe's tally and effectively unlock him, issue the
+							following
+							command:<programlisting># pam_tally2 --user jdoe --reset</programlisting></td>
+					</tr>
+				</tbody>
+			</table>
+		</para>
+	</section>	
+	
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-Removing">
+		<title>Removing Users</title>
+		<para>
+			<table frame="void">
+				<caption/>
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>In order to remove a user, you should lock their account. For this
+							exercise, we'll remove
+							jdoe:<programlisting># passwd -l jdoe</programlisting></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Next, we must kill all processes associated with
+							jdoe:<programlisting># kill  -9 $(ps -la --User jdoe | awk '{print $4}')</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>If we desire to recursively remove all files and directories belowing to
+							the user, we can do the
+							following:<programlisting># find / -depth \( ! -fstype ext4 -prune -false \) -o -user jdoe -exec rm -rf {} \;</programlisting>Be
+							aware that this may delete files belonging to others if they are stored
+							in a directory owned by this user!</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Remove any cron jobs that the user
+							has:<programlisting># crontab -u jdoe -r</programlisting></td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Finally, delete the
+							account:<programlisting># userdel jdoe</programlisting></td>
+					</tr>
+				</tbody>
+			</table>
+		</para>
+	</section>		
+	
+	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_Operation-AdminAccounts">
+		<title>Defining Administrative Accounts</title>
+		<para>
+			<table frame="void">
+				<caption/>
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>For this exercise, we'll add the user kelsey and define her as an
+							administrator. Let's add Kelsey to the system and set her
+							password:<programlisting># useradd kelsey
+# passwd kelsey</programlisting></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Add Kelsey to the wheel group. Administrative users MUST be members of
+							the wheel
+							group:<programlisting># gpasswd -a kelsey wheel</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>In LSPP mode, administrative users MUST be assigned to the staff_u
+							class, and must be assigned to one or more administrative roles.
+							Accomplish this by
+							doing:<programlisting># semanage login -a -s staff_u -r SystemLow-SystemHigh kelsey
+# restorecon -r /home/kelsey</programlisting>At
+							this point, Kelsey can login and transition into sysadmin_r, secadm_r,
+							and auditadm_r.</td>
+					</tr>
+				</tbody>
+			</table>
+		</para>
+	</section>			
 </chapter>

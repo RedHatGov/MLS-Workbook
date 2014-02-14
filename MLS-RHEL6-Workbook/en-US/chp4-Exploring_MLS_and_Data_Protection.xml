@@ -29,16 +29,201 @@ create have the potential for containing confidential information which must be 
 
 	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-TransRolesDomsTypes">
                 <title>Creating Translations, Roles, Domains, and Types</title>
-                <para>
-                        This is a test paragraph in a section
-                </para>
+		<para>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Since these developments are of the highest level of secrecy, we need to
+							determine what the highest level of security is now. We can do this by
+							executing a listing of securtity
+							compartments:<programlisting># semanage translation -l</programlisting>We
+							should see that s2 is the highest level of security at "Secret." For
+							this lab, we want to establish a highest level of security at s3. Keep
+							in mind the Bell-LaPadula principle of "write up, read down." Adding a
+							new heightened level of security should not be taken lightly. Creating a
+							level of s3 to handle this data works well, but how do we keep the temp,
+							server team, and desktop team from seeing each others files?<para>One
+								might think that regular Linux DAC permissions would work here, but
+								remember, the server and desktop teams need to be able to read what
+								management writes. These are technically two different gruops. While
+								ACLs would work in this situation, ACLs might not scale for our
+								future needs, so we use MLS categories.</para><para>With categories,
+									we can put the desktop team in s3:c1 and the server team in s3:c2.
+									If we then give the temp and his supervisor s3, they will not have
+									access to either of the categories, but will be at the appropriate
+									level of security. Let's go ahead and set up the security level and
+									categories:<programlisting># semanage translation -a -T rhsecret s3
+# semanage translation -a -T rhsecret:desktop s3:c0
+# semanage translation -a -T rhsecret:server s3:c1</programlisting></para></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Use semanage to make sure that the new levels are not set
+							correctly:<programlisting># semanage translation -l</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Now we have some of the base layout for the system, but how do we
+							determine who gets to be a part of rhsecret, rhsecret:desktop, and
+							rhsecret:server? Also, how do we regulate what data these levels have
+							access to? All of this needs to come about through the writing of an
+							SELinux policy which establishes the rules for a new SELinux user named
+							rhsecret_u who will operate in arole named rhsecret_r, which will be in
+							the domain of type rhsecret_t and have access to files of type
+							rhsecret_file_t. Execute the
+							following:<programlisting># cd /usr/share/selinux/devel
+# rnano rhsecret.te</programlisting></td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>Enter the following SELinux Policy into the text
+							editor:<programlisting>policy_module(rhsecret,1.0)
+
+gen_require('
+	role user_r;
+	role user_t;
+')
+
+require {
+	attribute domain;
+	attribute file_type;
+	class dir write;
+	class dir read;
+}
+
+# Define rhsecret_file_t as file type
+type rhsecret_file_t, file_type;
+
+# Build the domain for rhsecret. Build the role for rhsecret_r and put it
+#	in the domain of rhsecret_t
+userdom_unpriv_user_template(rhsecret)
+role rhsecret_r types rhsecret_t;
+
+# Allow users in the user_r to transition into the role rhsecret_r
+userdom_role_change_template(user,rhsecret)
+
+allow rhsecret_t self:capability dac_read_search
+
+# Set up the read/write privs for domain rhsecret_t when accessing files in 
+#	rhsecret_file_t
+allow rhsecret_t rhsecret_file_t:dir create_dir_perms;
+allow rhsecret_t rhsecret_file_t:file create_file_perms;
+allow rhsecret_t rhsecret_file_t:dir write;
+allow rhsecret_t rhsecret_file_t:dir read;</programlisting></td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Now that we have the policy written, save it and execute the following
+							to compile the
+							policy:<programlisting># make rhsecret.pp</programlisting></td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td>Load the
+							policy<programlisting># semodule -i rhsecret.pp</programlisting>Once you
+							have loaded a policy, it will reload when the machine is rebooted.</td>
+					</tr>
+					<tr>
+						<td>7</td>
+						<td>Add the following line to
+							/etc/selinux/mls/contexts/default_type:<programlisting>rhsecret_r:rhsecret_t</programlisting></td>
+					</tr>
+					<tr>
+						<td>8</td>
+						<td>Reboot the system for all of the changes to take effect.</td>
+					</tr>
+				</tbody>
+			</informaltable>
+		</para>
         </section>
 
         <section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-Users">
                 <title>Creating the SELinux User and Setting Up Users on the System</title>
-                <para>
-                        This is a test paragraph in a section
-                </para>
+<para>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Since SELinux roles are assigned to SELinux users, and we only want a
+							handful of users having access to the rhsecret_r role, it makes sense to
+							make an rhsecret_u user that our users on these projects will login as.
+							In orer to do this, let's add the SELinux
+							user:<programlisting># semanage user -a -R "user_r rhsecret_r" \
+-P rhsecret -r s0-s3:c0.c1 rhsecret_u</programlisting>This
+							command added a user who can function in both the user_r and rhsecret_r
+							role and can access security levels s0-s3 and categories c0 and c1 in
+							s3. Keep in mind the policy: "write up, read down." If we do not give
+							this SELinux user access to lower levels, we run into problems. Also
+							keep in mind that even through every user signs in and gets an SELinux
+							user assigned to them, their personal security level is determined by
+							the login iformation which is managed by semanage.</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Adding Shadowman the manager and Tony the temp. In order to add these
+							roles, we must first create their regular
+							users:<programlisting># useradd shadowman tony
+# passwd shadowman ; passwd tony</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Let's now assign the users shadowman and tony to the SELinux user
+							rhsecret_u and a security level of s3 only, so as not to let them access
+							the projects
+							directly:<programlisting># semanage login -a -s rhsecret_u -r s3 shadowman
+# semanage login -a -s rhsecret_u -r s3 tony</programlisting></td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>We can't forget about discretionary permissions either, so let's create
+							a group for all of our users and add shadowman and tony to that
+							group:<programlisting># groupadd rhsecret
+# gpasswd -a shadowman rhsecret
+# gpasswd -a tony rhsecret</programlisting></td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Now we need to add users to the Desktop team. We'll add Robin and
+							Lee:<programlisting># useradd robin ; passwd robin
+# useradd lee ; passwd lee
+# gpasswd -a robin rhsecret
+# gpasswd -a lee rhsecret
+# semanage login -a -s rhsecret_u -r s3:c0 robin
+# semanage login -a -s rhsecret_u -r s3:c0 lee</programlisting>Notice
+							how we gave Robin and Lee s3:c0. This is the security and category
+							associated with the rhsecret:desktop team.</td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td>Now we need to add users to the Server team. We'll add Ted and
+							Shawn:<programlisting># useradd ted ; passwd ted ; gpasswd -a ted rhsecret
+# useradd shawn ; passwd shawn ; gpasswd -a shawn rhsecret
+# semanage login -a -s rhsecret_u -r s3:c1 ted
+# semanage login -a -s rhsecret_u -r s3:c1 shawn</programlisting>Notice
+							how we have not given Ted and Shawn access to c0. This is so that they
+							can only get to rhsecret:server (s3:c1) and not rhsecret:desktop
+							(s3:c0).</td>
+					</tr>
+				</tbody>
+			</informaltable>
+		</para>
         </section>
 
 	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-DirInfra">

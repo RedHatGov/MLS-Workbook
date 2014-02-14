@@ -13,32 +13,154 @@ that anyone without CIPSO labeled networking will be unable to log in to a CIPSO
 	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-MLSSSH">
 		<title>Switching to the MLS Enabled SSH Server</title>
 		<para>
-			This is a test paragraph in a section
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Since the regular SSH server is not labeled networking enabled, you will
+							need to switch to the sshd-mls server. This is controlled by xinetd!
+							First, turn off the regular SSH
+							server:<programlisting># chkconfig sshd off</programlisting></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>By default, sshd-mls runs on port 222. To change this, edit
+							/etc/xinetd.d/sshd-mls and change the value for port. Regardless of
+							which port you want to run this service on, you need to add that port to
+							ssh_port_t. This is accomplished by doing teh following (example assumes
+							port
+							222):<programlisting># semanage port -a -t ssh_port_t -p tcp 222</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Reboot to enable your changes. Repeate this procedure on the second MLS
+							machine.</td>
+					</tr>
+				</tbody>
+			</informaltable>
 		</para>
 	</section>
 	
 	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-ActivateCIPSO">
 		<title>Activating CIPSO Labeled Networking</title>
 		<para>
-			This is a test paragraph in Section 2
-			<orderedlist>
-				<listitem>
-					<para>
-						listitem text
-					</para>
-				</listitem>
-			</orderedlist>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Issue the following commands on both machines as
+							root/sysadm_r/SystemLow:<programlisting>netlabelctl cipsov4 add pass dio:1 tags:1
+netlabelctl map del default
+netlabelctl map add default protocol:cipsov4,1
+netlabelctl unlbl accept off</programlisting>You
+							have now enabled CIPSO labeled networking.</td>
+					</tr>
+				</tbody>
+			</informaltable>
 		</para>
 	</section>
 
 	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-TestingCIPSO">
 		<title>Testing CIPSO Labeled Networking</title>
-		<para>. . .</para>
+		<para>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>At this point, you should be able to ssh between your two MLS machines.
+							On the first system, execute the
+							following:<programlisting># ssh -p 222 user@machine2</programlisting>Where
+							"user" is your username. This should work.</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>On machien2, execute the
+							following:<programlisting>ssh -p 222 user@machine1</programlisting>Again,
+							replace "user" with your username. This should work.</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>On your workstation host, add the following to
+							/etc/hosts:<programlisting>192.168.100.1	machine1.example.com	machine1
+192.168.100.2	machine2.example.com	machine2</programlisting>Attempt
+							to ssh into machine1.example.com from the
+							workstation:<programlisting># ssh -p 222 user@machine1.example.com</programlisting>You
+							should not be successful as your workstation host does not have labeled
+							networking.</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>Reboot both machines and try this exercise again. What happens, and
+							why?</td>
+					</tr>
+				</tbody>
+			</informaltable>
+		</para>
 	</section>
 
 	<section id="sect-MLS_RHEL6_Workbook-CIPSO_Labeled_Networking-CIPSOPersistance">
 		<title>Making CIPSO Labeled Networking Permanent</title>
-		<para> . . . </para>
+		<para>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>In the previous part of the lab we found ourselves with a machine that
+							once rebooted no longer worked. This is because our netlabel commands
+							are flished with the machine is shutdown. In order to get around this,
+							add the following to /etc/netlabel.rules on both
+							machines:<programlisting># Turn on labeled networking
+cipsov4 add pass doi:1 tags:1
+map del default
+map add default protocol:cipsov4,1
+unlbl accept off</programlisting></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>Once you have done this, enable the netlabel service on
+							boot:<programlisting># chkconfig netlabel on</programlisting></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>Reboot your machines and try "Testing CIPSO Labeled Networking" again.
+							This time everything <emphasis role="italic">should</emphasis>
+							work.</td>
+					</tr>
+				</tbody>
+			</informaltable>
+		</para>
 	</section>
 
 </chapter>

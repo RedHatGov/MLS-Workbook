@@ -93,13 +93,13 @@ netlabelctl unlbl accept off</programlisting>You
 						<td>1</td>
 						<td>At this point, you should be able to ssh between your two MLS machines.
 							On the first system, execute the
-							following:<programlisting># ssh -p 222 user@machine2</programlisting>Where
+							following:<programlisting><command># ssh -p 222 user@machine2</command></programlisting>Where
 							"user" is your username. This should work.</td>
 					</tr>
 					<tr>
 						<td>2</td>
-						<td>On machien2, execute the
-							following:<programlisting>ssh -p 222 user@machine1</programlisting>Again,
+						<td>On machine2, execute the
+							following:<programlisting><command># ssh -p 222 user@machine1</command></programlisting>Again,
 							replace "user" with your username. This should work.</td>
 					</tr>
 					<tr>
@@ -108,7 +108,7 @@ netlabelctl unlbl accept off</programlisting>You
 							/etc/hosts:<programlisting>192.168.100.1	machine1.example.com	machine1
 192.168.100.2	machine2.example.com	machine2</programlisting>Attempt
 							to ssh into machine1.example.com from the
-							workstation:<programlisting># ssh -p 222 user@machine1.example.com</programlisting>You
+							workstation:<programlisting><command># ssh -p 222 user@machine1.example.com</command></programlisting>You
 							should not be successful as your workstation host does not have labeled
 							networking.</td>
 					</tr>
@@ -137,10 +137,10 @@ netlabelctl unlbl accept off</programlisting>You
 				<tbody>
 					<tr>
 						<td>1</td>
-						<td>In the previous part of the lab we found ourselves with a machine that
-							once rebooted no longer worked. This is because our netlabel commands
-							are flished with the machine is shutdown. In order to get around this,
-							add the following to /etc/netlabel.rules on both
+						<td>In the previous part of the lab we found ourselves with a machine that once rebooted no
+							longer worked. This is because our netlabel commands are flished with
+							the machine is shutdown. In order to get around this, add the following
+							to <emphasis role="bold">/etc/netlabel.rules</emphasis> on both
 							machines:<programlisting># Turn on labeled networking
 cipsov4 add pass doi:1 tags:1
 map del default
@@ -150,7 +150,7 @@ unlbl accept off</programlisting></td>
 					<tr>
 						<td>2</td>
 						<td>Once you have done this, enable the netlabel service on
-							boot:<programlisting># chkconfig netlabel on</programlisting></td>
+							boot:<programlisting><command># chkconfig netlabel on</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>3</td>
@@ -164,4 +164,3 @@ unlbl accept off</programlisting></td>
 	</section>
 
 </chapter>
-

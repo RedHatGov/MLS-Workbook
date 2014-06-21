@@ -28,7 +28,7 @@ that anyone without CIPSO labeled networking will be unable to log in to a CIPSO
 						<td>Since the regular SSH server is not labeled networking enabled, you will
 							need to switch to the sshd-mls server. This is controlled by xinetd!
 							First, turn off the regular SSH
-							server:<programlisting># chkconfig sshd off</programlisting></td>
+							server:<programlisting><command># chkconfig sshd off</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>2</td>
@@ -37,7 +37,7 @@ that anyone without CIPSO labeled networking will be unable to log in to a CIPSO
 							which port you want to run this service on, you need to add that port to
 							ssh_port_t. This is accomplished by doing teh following (example assumes
 							port
-							222):<programlisting># semanage port -a -t ssh_port_t -p tcp 222</programlisting></td>
+							222):<programlisting><command># semanage port -a -t ssh_port_t -p tcp 222</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>3</td>
@@ -65,10 +65,12 @@ that anyone without CIPSO labeled networking will be unable to log in to a CIPSO
 					<tr>
 						<td>1</td>
 						<td>Issue the following commands on both machines as
-							root/sysadm_r/SystemLow:<programlisting>netlabelctl cipsov4 add pass dio:1 tags:1
-netlabelctl map del default
-netlabelctl map add default protocol:cipsov4,1
-netlabelctl unlbl accept off</programlisting>You
+							root/sysadm_r/SystemLow:
+							
+<programlisting><command># netlabelctl cipsov4 add pass dio:1 tags:1</command>
+<command># netlabelctl map del default</command>
+<command># netlabelctl map add default protocol:cipsov4,1</command>
+<command># netlabelctl unlbl accept off</command></programlisting>You
 							have now enabled CIPSO labeled networking.</td>
 					</tr>
 				</tbody>

@@ -45,7 +45,7 @@ create have the potential for containing confidential information which must be 
 						<td>Since these developments are of the highest level of secrecy, we need to
 							determine what the highest level of security is now. We can do this by
 							executing a listing of securtity
-							compartments:<programlisting># semanage translation -l</programlisting>We
+							compartments:<programlisting><command># semanage translation -l</command></programlisting>We
 							should see that s2 is the highest level of security at "Secret." For
 							this lab, we want to establish a highest level of security at s3. Keep
 							in mind the Bell-LaPadula principle of "write up, read down." Adding a
@@ -61,14 +61,15 @@ create have the potential for containing confidential information which must be 
 									If we then give the temp and his supervisor s3, they will not have
 									access to either of the categories, but will be at the appropriate
 									level of security. Let's go ahead and set up the security level and
-									categories:<programlisting># semanage translation -a -T rhsecret s3
-# semanage translation -a -T rhsecret:desktop s3:c0
-# semanage translation -a -T rhsecret:server s3:c1</programlisting></para></td>
+									categories:
+<programlisting><command># semanage translation -a -T rhsecret s3</command>
+<command># semanage translation -a -T rhsecret:desktop s3:c0</command>
+<command># semanage translation -a -T rhsecret:server s3:c1</command></programlisting></para></td>
 					</tr>
 					<tr>
 						<td>2</td>
-						<td>Use semanage to make sure that the new levels are not set
-							correctly:<programlisting># semanage translation -l</programlisting></td>
+						<td>Use semanage to make sure that the new levels are now set
+							correctly:<programlisting><command># semanage translation -l</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>3</td>
@@ -80,8 +81,9 @@ create have the potential for containing confidential information which must be 
 							rhsecret_u who will operate in arole named rhsecret_r, which will be in
 							the domain of type rhsecret_t and have access to files of type
 							rhsecret_file_t. Execute the
-							following:<programlisting># cd /usr/share/selinux/devel
-# rnano rhsecret.te</programlisting></td>
+							following:
+<programlisting><command># cd /usr/share/selinux/devel</command>
+<command># rnano rhsecret.te</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>4</td>
@@ -124,12 +126,12 @@ allow rhsecret_t rhsecret_file_t:dir read;</programlisting></td>
 						<td>5</td>
 						<td>Now that we have the policy written, save it and execute the following
 							to compile the
-							policy:<programlisting># make rhsecret.pp</programlisting></td>
+							policy:<programlisting><command># make rhsecret.pp</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>6</td>
 						<td>Load the
-							policy<programlisting># semodule -i rhsecret.pp</programlisting>Once you
+							policy<programlisting><command># semodule -i rhsecret.pp</command></programlisting>Once you
 							have loaded a policy, it will reload when the machine is rebooted.</td>
 					</tr>
 					<tr>
@@ -165,8 +167,9 @@ allow rhsecret_t rhsecret_file_t:dir read;</programlisting></td>
 							handful of users having access to the rhsecret_r role, it makes sense to
 							make an rhsecret_u user that our users on these projects will login as.
 							In orer to do this, let's add the SELinux
-							user:<programlisting># semanage user -a -R "user_r rhsecret_r" \
--P rhsecret -r s0-s3:c0.c1 rhsecret_u</programlisting>This
+							user:
+<programlisting><command># semanage user -a -R "user_r rhsecret_r" \</command>
+<command>-P rhsecret -r s0-s3:c0.c1 rhsecret_u</command></programlisting>This
 							command added a user who can function in both the user_r and rhsecret_r
 							role and can access security levels s0-s3 and categories c0 and c1 in
 							s3. Keep in mind the policy: "write up, read down." If we do not give
@@ -179,44 +182,49 @@ allow rhsecret_t rhsecret_file_t:dir read;</programlisting></td>
 						<td>2</td>
 						<td>Adding Shadowman the manager and Tony the temp. In order to add these
 							roles, we must first create their regular
-							users:<programlisting># useradd shadowman tony
-# passwd shadowman ; passwd tony</programlisting></td>
+							users:
+<programlisting><command># useradd shadowman tony</command>
+<command># passwd shadowman ; passwd tony</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>3</td>
 						<td>Let's now assign the users shadowman and tony to the SELinux user
 							rhsecret_u and a security level of s3 only, so as not to let them access
 							the projects
-							directly:<programlisting># semanage login -a -s rhsecret_u -r s3 shadowman
-# semanage login -a -s rhsecret_u -r s3 tony</programlisting></td>
+							directly:
+<programlisting><command># semanage login -a -s rhsecret_u -r s3 shadowman</command>
+<command># semanage login -a -s rhsecret_u -r s3 tony</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>4</td>
 						<td>We can't forget about discretionary permissions either, so let's create
 							a group for all of our users and add shadowman and tony to that
-							group:<programlisting># groupadd rhsecret
-# gpasswd -a shadowman rhsecret
-# gpasswd -a tony rhsecret</programlisting></td>
+							group:
+<programlisting><command># groupadd rhsecret</command>
+<command># gpasswd -a shadowman rhsecret</command>
+<command># gpasswd -a tony rhsecret</command></programlisting></td>
 					</tr>
 					<tr>
 						<td>5</td>
 						<td>Now we need to add users to the Desktop team. We'll add Robin and
-							Lee:<programlisting># useradd robin ; passwd robin
-# useradd lee ; passwd lee
-# gpasswd -a robin rhsecret
-# gpasswd -a lee rhsecret
-# semanage login -a -s rhsecret_u -r s3:c0 robin
-# semanage login -a -s rhsecret_u -r s3:c0 lee</programlisting>Notice
+							Lee:
+<programlisting><command># useradd robin ; passwd robin</command>
+<command># useradd lee ; passwd lee</command>
+<command># gpasswd -a robin rhsecret</command>
+<command># gpasswd -a lee rhsecret</command>
+<command># semanage login -a -s rhsecret_u -r s3:c0 robin</command>
+<command># semanage login -a -s rhsecret_u -r s3:c0 lee</command></programlisting>Notice
 							how we gave Robin and Lee s3:c0. This is the security and category
 							associated with the rhsecret:desktop team.</td>
 					</tr>
 					<tr>
 						<td>6</td>
 						<td>Now we need to add users to the Server team. We'll add Ted and
-							Shawn:<programlisting># useradd ted ; passwd ted ; gpasswd -a ted rhsecret
-# useradd shawn ; passwd shawn ; gpasswd -a shawn rhsecret
-# semanage login -a -s rhsecret_u -r s3:c1 ted
-# semanage login -a -s rhsecret_u -r s3:c1 shawn</programlisting>Notice
+							Shawn:
+<programlisting><command># useradd ted ; passwd ted ; gpasswd -a ted rhsecret</command>
+<command># useradd shawn ; passwd shawn ; gpasswd -a shawn rhsecret</command>
+<command># semanage login -a -s rhsecret_u -r s3:c1 ted</command>
+<command># semanage login -a -s rhsecret_u -r s3:c1 shawn</command></programlisting>Notice
 							how we have not given Ted and Shawn access to c0. This is so that they
 							can only get to rhsecret:server (s3:c1) and not rhsecret:desktop
 							(s3:c0).</td>
@@ -228,12 +236,111 @@ allow rhsecret_t rhsecret_file_t:dir read;</programlisting></td>
 
 	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-DirInfra">
 		<title>Building the Directory Infrastructure</title>
-		<para> . . . </para>
+		<para>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Now we need to set up directories for our groups. Let's set the following
+									up:<para><emphasis role="bold">/rhsproject: </emphasis>The
+								irectory for Tony and shadowman to primarily access. Accessible by
+								anyone in s3 so long as they log in with s3 and the correct
+								role.</para><para><emphasis role="bold">/rhsdesktop: </emphasis>The
+								directory for the desktop team. Only accessible to those in s3:c0
+								when they login with s3:c0 and the correct
+									role.</para><para><emphasis role="bold">/rhsserver:
+								</emphasis>The directory for the server team. Only accessible to
+								those in s3:c1 when they login with s3:c1 and the correct
+								role.</para></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td><para>Set up
+							/rhsproject:<programlisting><command>$ mkdir /rhsproject</command>
+<command>$ chcon rhsecret_u:object_r:rhsecret_file_t:s3 /rhsproject</command>
+<command>$ chown :rhsecret /rhsproject</command>
+<command>$ chmod g+rws /rhsproject</command></programlisting></para></td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td><para>Set up /rhsdesktop:
+<programlisting><command>$ mkdir /rhsdesktop</command>
+<command>$ chcon rhsecret_u:object_r:rhsecret_file_t:s3:c0 /rhsdesktop</command>
+<command>$ chown :rhsecret /rhsdesktop</command>
+<command>$ chmod g+rws /rhsdesktop</command></programlisting></para></td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td><para>Set up /rhsserver:
+							<programlisting><command>$ mkdir /rhsserver</command>
+<command>$ chcon rhsecret_u:object_r:rhsecret_file_t:s3:c1 /rhsserver</command>
+<command>$ chown :rhsecret /rhsserver</command>
+<command>$ chmod g+rws /rhsserver</command></programlisting></para></td>
+					</tr>
+				</tbody>
+			</informaltable>
+		</para>
 	</section>
 
 	<section id="sect-MLS_RHEL6_Workbook-Exploring_MLS_and_Data_Protection-Testing">
 		<title>Testing Our Setup</title>
-		<para> . . . </para>
+		<para>
+			<informaltable frame="void">
+				<col width="6%"/>
+				<col width="94%"/>
+				<thead>
+					<tr>
+						<th>Step</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>Log in as shadowman and say "n" to do you want to chose a new role.</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>
+							<para>Since we said no at first to chosing a new role, we find now that
+								we have more to type:</para>
+							<para>
+								<programlisting><command>secon</command></programlisting>
+							</para>
+							<para>We should see that we are in the role user_r with a user of rhsecret_u. The SELinux
+								policy that we wrote should allow us to change roles to rhsecret_r.
+								Let's try:</para>
+							<para><programlisting><command>$ newrole -r rhsecret_r</command></programlisting></para>
+							<para>You will be asked to enter your password again. Once you have done
+								this, you should be logged in with the role rhsecret_r.</para>
+						</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td><para>See if you can write a file in the directory
+								/rhsproject:<programlisting><command>$ cd /rhsproject</command>
+<command>echo "My first report" >> testfile</command></programlisting></para>
+						<para>The above should work.</para></td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td><para>Attempt to access /rhsdesktop and
+								/rhsserver:<programlisting><command>$ cd /rhsdesktop</command></programlisting></para>
+						<para>You should get a permission denied error. Try /rhsserver.</para>
+						
+		</td>
+					</tr>
+				</tbody>
+			</informaltable>
+		</para>
 	</section>
 
 

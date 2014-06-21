@@ -51,7 +51,8 @@ users to an MLS system, lock and unlock user accounts, remove users, and definin
 						<td>The reason root is getting a permission denied is that while you are logged in as root,
 							you also have the role of staff_r. In order to do system administration
 							tasks, you need to switch to the role
-								sysadm_r:<programlisting><command># newrole -r sysadm_r</command><command># ls</command></programlisting><para>You
+								sysadm_r:<programlisting><command># newrole -r sysadm_r</command>
+<command># ls</command></programlisting><para>You
 								will be asked to authenticate yourself. You will need to enter your
 								password, not root's password. Once you have finished this, the ls
 								should work.</para></td>
@@ -83,7 +84,8 @@ Error opening /var/log/audit/audit.log (Permission denied)</programlisting></par
 						<td>8</td>
 						<td>In order to be able to use ausearch, we need to be in the role sysadm_r,
 							not auditadm_r. Since we were just in the role sysadm_r, we can simply
-								do:<para>exit</para><para>and we should then be back as sysadm_r. Do
+								do:
+							<programlisting><command># exit</command></programlisting><para>and we should then be back as sysadm_r. Do
 								the following:</para><para><programlisting><command># touch /root/donttouch</command>
 <command># ausearch -k privileged_files</command></programlisting></para></td>
 					</tr>

@@ -9,7 +9,7 @@ Developer Notes
 The MLS workbook has been designed around the Publican documentation system:
 https://fedorahosted.org/publican/
 
-To install Publican on Fedora or RHEL:
+Make sure rhel-7-server-optional-rpms is enabled on your system. Once enabled, to install Publican on Fedora or RHEL:
 
 $ sudo yum install publican publican-redhat
 

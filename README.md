@@ -34,3 +34,8 @@ $ make content
 
 Output will be placed into the tmp/ directory, e.g.:
 tmp/en-US/html-single/
+
+
+Misc Notes
+============
+Need an XML editor? Check out https://www.oxygenxml.com/ (they have free eval editions).
